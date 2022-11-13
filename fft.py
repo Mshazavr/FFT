@@ -110,7 +110,7 @@ def test_1():
     pol_a = [1,1]
     pol_b = [1,1]
 
-    print (f"\t({polynomial_to_str(pol_a)}) * ({polynomial_to_str(pol_b)}) = ")
+    print(f"\t({polynomial_to_str(pol_a)}) * ({polynomial_to_str(pol_b)}) = ")
     print(f"\t{polynomial_to_str(map(lambda x: round(x), polynomial_multiply(pol_a, pol_b)))}")
 
 
@@ -121,7 +121,7 @@ def test_2():
     pol_a = [4,1, -4, 1, 1]
     pol_b = [4, 5, 0, -2]
 
-    print (f"\t({polynomial_to_str(pol_a)}) * ({polynomial_to_str(pol_b)}) = ")
+    print(f"\t({polynomial_to_str(pol_a)}) * ({polynomial_to_str(pol_b)}) = ")
     print(f"\t{polynomial_to_str(map(lambda x: round(x), polynomial_multiply(pol_a, pol_b)))} VS")
     print(f"\t{polynomial_to_str(brute_polynomial_multiply(pol_a, pol_b))}")
 
