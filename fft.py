@@ -7,11 +7,13 @@ def log_elapsed_time(func: Callable):
     """Decorator for timing a function."""
 
     def wrapper_log_elapsed_time(*args, **kwargs):
+        print(f"RUNNING {func.__name__}({args}, {kwargs})")
         start = time.time()
         res = func(*args, **kwargs)
         end = time.time()
-        print(f"ELAPSED TIME: {end - start}")
+        print(f"ELAPSED TIME FOR {func.__name__}: {round(end - start, 2)}")
         return res
+
     return wrapper_log_elapsed_time
 
 def power_of_two_ceiling(n: int):
@@ -71,7 +73,7 @@ def polynomial_multiply(a: List[float], b: List[float]) -> List[float]:
     ft = [x * y for (x, y) in zip(ft_a, ft_b)]
 
     # Step 3: Go back to the original space
-    return map(lambda x : round(x.real), fft(ft, inv=True))
+    return list(map(lambda x : round(x.real), fft(ft, inv=True)))
 
 
 def brute_polynomial_multiply(a: List[float], b: List[float]) -> List[float]:
@@ -83,14 +85,10 @@ def brute_polynomial_multiply(a: List[float], b: List[float]) -> List[float]:
     a_complete = a + [0] * (m - len(a))
     b_complete = b + [0] * (m - len(b))
 
-    c = [0] * m
-    for i in range(m):
-        for j in range(i+1):
-            c[i] += a_complete[j] * b_complete[i-j]
-
-    return c
-
-
+    return [
+        sum([a_complete[j] * b_complete[i-j] for j in range(i+1)]) 
+        for i in range(m)
+    ]
 
 def polynomial_to_str(a: List[float]) -> str:
     """Returns a string representation of the given 
@@ -122,19 +120,17 @@ def test_2():
 
 # Should run under 3 seconds
 @log_elapsed_time
-def test_3():
+def test_3(count: int = 50000, method: str = "fft"):
     random.seed(42)
-    pol_a = [random.random() for i in range(50000)]
-    pol_b = [random.random() for i in range(50000)]
+    pol_a = [random.random() for i in range(count)]
+    pol_b = [random.random() for i in range(count)]
 
-    start = time.time()
-    res = polynomial_multiply(pol_a, pol_b)
-    #res = brute_polynomial_multiply(pol_a, pol_b)
+    res = polynomial_multiply(pol_a, pol_b) if method == "fft" else brute_polynomial_multiply(pol_a, pol_b)
 
 def main():
     test_1()
     test_2()
-    test_3()
+    test_3(count=50000, method="fft")
 
 if __name__ == "__main__":
     main()
