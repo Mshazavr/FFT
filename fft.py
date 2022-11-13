@@ -7,11 +7,13 @@ def log_elapsed_time(func: Callable):
     """Decorator for timing a function."""
 
     def wrapper_log_elapsed_time(*args, **kwargs):
+        print("/" * 10)
         print(f"RUNNING {func.__name__}({args}, {kwargs})")
         start = time.time()
         res = func(*args, **kwargs)
         end = time.time()
         print(f"ELAPSED TIME FOR {func.__name__}: {round(end - start, 2)}")
+        print()
         return res
 
     return wrapper_log_elapsed_time
@@ -73,7 +75,7 @@ def polynomial_multiply(a: List[float], b: List[float]) -> List[float]:
     ft = [x * y for (x, y) in zip(ft_a, ft_b)]
 
     # Step 3: Go back to the original space
-    return list(map(lambda x : round(x.real), fft(ft, inv=True)))
+    return list(map(lambda x : x.real, fft(ft, inv=True)))
 
 
 def brute_polynomial_multiply(a: List[float], b: List[float]) -> List[float]:
@@ -100,37 +102,51 @@ def polynomial_to_str(a: List[float]) -> str:
     ]
     return " + ".join(coefficients)
 
+
+@log_elapsed_time
 def test_1():
+    """Simple test for fft polynomial multiplication."""
+
     pol_a = [1,1]
     pol_b = [1,1]
 
-    print (f"({polynomial_to_str(pol_a)}) * ({polynomial_to_str(pol_b)}) = ")
-    print(f"{polynomial_to_str(polynomial_multiply(pol_a, pol_b))}")
+    print (f"\t({polynomial_to_str(pol_a)}) * ({polynomial_to_str(pol_b)}) = ")
+    print(f"\t{polynomial_to_str(map(lambda x: round(x), polynomial_multiply(pol_a, pol_b)))}")
 
 
+@log_elapsed_time
 def test_2():
+    """Simple test for fft polynomial multiplication."""
+
     pol_a = [4,1, -4, 1, 1]
     pol_b = [4, 5, 0, -2]
 
-    print (f"({polynomial_to_str(pol_a)}) * ({polynomial_to_str(pol_b)}) = ")
-    print(f"{polynomial_to_str(polynomial_multiply(pol_a, pol_b))}")
-    print ("VS")
-    print(f"{polynomial_to_str(brute_polynomial_multiply(pol_a, pol_b))}")
+    print (f"\t({polynomial_to_str(pol_a)}) * ({polynomial_to_str(pol_b)}) = ")
+    print(f"\t{polynomial_to_str(map(lambda x: round(x), polynomial_multiply(pol_a, pol_b)))} VS")
+    print(f"\t{polynomial_to_str(brute_polynomial_multiply(pol_a, pol_b))}")
 
 
-# Should run under 3 seconds
 @log_elapsed_time
 def test_3(count: int = 50000, method: str = "fft"):
+    """Test for fft polynomial multiplication with given input size."""
+
+    assert method in {"fft", "brute_force"}
     random.seed(42)
     pol_a = [random.random() for i in range(count)]
     pol_b = [random.random() for i in range(count)]
 
-    res = polynomial_multiply(pol_a, pol_b) if method == "fft" else brute_polynomial_multiply(pol_a, pol_b)
+    res = (
+        polynomial_multiply(pol_a, pol_b) if method == "fft" 
+        else brute_polynomial_multiply(pol_a, pol_b)
+    )
+
+    assert res[0] - pol_a[0] * pol_b[0] < 0.000001
 
 def main():
     test_1()
     test_2()
     test_3(count=50000, method="fft")
+    test_3(count=10000, method="brute_force")
 
 if __name__ == "__main__":
     main()
