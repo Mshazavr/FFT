@@ -59,8 +59,9 @@ def test_fft(count: int = 50000, method: str = "fft"):
 def main():
     test_trivial()
     test_basic()
-    #test_large(count=100000, method="fft")
-    #test_large(count=100000, method="brute_force")
+    
+    test_large(count=100000, method="fft")
+    test_large(count=100000, method="brute_force")
 
     test_fft(count=(1 << 12), method="fft")
     test_fft(count=(1 << 12), method="numpy_fft")
