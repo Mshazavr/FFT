@@ -61,7 +61,7 @@ def main():
     test_basic()
     
     test_large(count=100000, method="fft")
-    test_large(count=100000, method="brute_force")
+    test_large(count=10000, method="brute_force")
 
     test_fft(count=(1 << 12), method="fft")
     test_fft(count=(1 << 12), method="numpy_fft")
