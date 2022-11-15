@@ -12,7 +12,7 @@ def main():
         compression_rate = 10 * (i + 1)
         encoded_object = encode_image(img, compression_rate=compression_rate)
         decoded_image = decode_image(encoded_object)
-        plt.imsave(f"data/dog1_q{compression_rate}.jpeg", decoded_image, format="jpeg")
+        plt.imsave(f"data/cat1_q{compression_rate}.jpeg", decoded_image, format="jpeg")
 
 
 if __name__ == "__main__":

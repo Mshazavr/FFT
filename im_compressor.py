@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 import numpy as np
-from fft import fft, power_of_two_ceiling
+from fft import power_of_two_ceiling
+from numpy.fft import fft, ifft
+
+# ifft = lambda x : fft(x, inv=True)
 
 @dataclass
 class ImageFFTCompressedData:
@@ -23,15 +26,15 @@ def decode_image(fft_object: ImageFFTCompressedData) -> np.ndarray[complex]:
         # Inverse transform columns and truncate
         result = np.array(
             [
-                fft(col, inv=True) 
+                ifft(col)
                 for col in grayscale.transpose()
             ]
         ).transpose()[:final_height, :]
 
         # Inverse transform rows and truncate and convert to int
         result = np.array(
-            [fft(row, inv=True) for row in result]
-        )[:, :final_width].real.astype("uint8")
+            [ifft(row) for row in result]
+        )[:, :final_width].real.clip(min = 0, max=255.9).astype("uint8")
 
         return result
 

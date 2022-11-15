@@ -36,6 +36,7 @@ def fft(a: np.ndarray[complex], inv: bool=False) -> np.ndarray[complex]:
     omega = np.array([omega_n ** i for i in range(n)], dtype=complex)
 
     mult = 1 if not inv else 0.5
+    #mult = ((2 ** (0.5)) / 2.0)
     return mult * (
         np.concatenate((evens_fft, evens_fft)) + 
         (omega * np.concatenate((odds_fft, odds_fft)))
