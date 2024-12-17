@@ -23,7 +23,7 @@ def test_basic():
 
     print(f"\t({polynomial_to_str(pol_a)}) * ({polynomial_to_str(pol_b)}) = ")
     print(f"\t{polynomial_to_str(map(lambda x: round(x), polynomial_multiply(pol_a, pol_b)))} VS")
-    print(f"\t{polynomial_to_str(brute_polynomial_multiply(pol_a, pol_b))}")
+    print(f"\t{polynomial_to_str(map(lambda x: round(x), brute_polynomial_multiply(pol_a, pol_b)))}")
 
 
 @log_elapsed_time
@@ -60,11 +60,11 @@ def main():
     test_trivial()
     test_basic()
     
-    test_large(count=100000, method="fft")
+    test_large(count=10000, method="fft")
     test_large(count=10000, method="brute_force")
 
-    test_fft(count=(1 << 12), method="fft")
-    test_fft(count=(1 << 12), method="numpy_fft")
+    test_fft(count=(1 << 20), method="fft")
+    test_fft(count=(1 << 20), method="numpy_fft")
 
 if __name__ == "__main__":
     main()
